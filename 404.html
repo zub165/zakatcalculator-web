@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Zakat Calculator">
+    <meta name="apple-mobile-web-app-title" content="Zakat Calculator">
+    <meta name="msapplication-TileColor" content="#4CAF50">
+    <meta name="description" content="Calculate your Zakat easily with our modern calculator">
+    
+    <title>Zakat Calculator</title>
+    
+    <!-- PWA Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/zub165/zakatcalculator/main/icons/icon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/zub165/zakatcalculator/main/icons/icon-180.png">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Default Theme (Green) */
+            --primary-color: #4CAF50;
+            --primary-light: #81C784;
+            --primary-dark: #388E3C;
+            --secondary-color: #C8E6C9;
+            --background-color: rgba(248, 249, 250, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-color: #E8F5E9;
+            --pattern-color: rgba(76, 175, 80, 0.08);
+            --pattern-secondary: rgba(76, 175, 80, 0.05);
+        }
+
+        /* Blue Theme */
+        [data-theme="blue"] {
+            --primary-color: #2196F3;
+            --primary-light: #64B5F6;
+            --primary-dark: #1976D2;
+            --secondary-color: #BBDEFB;
+            --background-color: rgba(248, 249, 250, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-color: #E3F2FD;
+            --pattern-color: rgba(33, 150, 243, 0.08);
+            --pattern-secondary: rgba(33, 150, 243, 0.05);
+        }
+
+        /* Purple Theme */
+        [data-theme="purple"] {
+            --primary-color: #9C27B0;
+            --primary-light: #BA68C8;
+            --primary-dark: #7B1FA2;
+            --secondary-color: #E1BEE7;
+            --background-color: rgba(248, 249, 250, 0.95);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-color: #2c3e50;
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --hover-color: #F3E5F5;
+            --pattern-color: rgba(156, 39, 176, 0.08);
+            --pattern-secondary: rgba(156, 39, 176, 0.05);
+        }
+
+        /* Dark Theme */
+        [data-theme="dark"] {
+            --primary-color: #66BB6A;
+            --primary-light: #81C784;
+            --primary-dark: #4CAF50;
+            --secondary-color: #1E1E1E;
+            --background-color: rgba(18, 18, 18, 0.95);
+            --card-bg: rgba(30, 30, 30, 0.95);
+            --text-color: #FFFFFF;
+            --border-color: #333333;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --hover-color: #2C2C2C;
+            --pattern-color: rgba(102, 187, 106, 0.12);
+            --pattern-secondary: rgba(102, 187, 106, 0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Islamic Pattern Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-color: var(--pattern-color);
+            background-image: 
+                /* Star Pattern */
+                linear-gradient(30deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                linear-gradient(150deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                linear-gradient(30deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                linear-gradient(150deg, var(--pattern-color) 12%, transparent 12.5%, transparent 87%, var(--pattern-color) 87.5%, var(--pattern-color)),
+                /* Overlapping Circles */
+                radial-gradient(circle at 0% 50%, transparent 9%, var(--pattern-secondary) 10%, var(--pattern-secondary) 15%, transparent 16%),
+                radial-gradient(circle at 50% 50%, transparent 9%, var(--pattern-secondary) 10%, var(--pattern-secondary) 15%, transparent 16%),
+                /* Geometric Lines */
+                linear-gradient(45deg, var(--pattern-secondary) 25%, transparent 25%, transparent 75%, var(--pattern-secondary) 75%, var(--pattern-secondary)),
+                linear-gradient(45deg, var(--pattern-secondary) 25%, transparent 25%, transparent 75%, var(--pattern-secondary) 75%, var(--pattern-secondary));
+            background-size: 
+                80px 140px, /* Star Pattern */
+                80px 140px,
+                80px 140px,
+                80px 140px,
+                60px 60px, /* Circles */
+                60px 60px,
+                60px 60px, /* Geometric Lines */
+                60px 60px;
+            background-position: 
+                0 0, 0 0, 40px 70px, 40px 70px, /* Star Pattern */
+                0 0, 30px 30px, /* Circles */
+                0 0, 30px 30px; /* Geometric Lines */
+            opacity: 0.7;
+        }
+
+        /* Add a subtle gradient overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, transparent 0%, var(--background-color) 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 0 20px var(--shadow-color);
+            position: relative;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding: 15px 0;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            background: var(--hover-color);
+        }
+
+        .category-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+
+        .category-name {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .category-value {
+            font-size: 14px;
+            color: var(--primary-color);
+            font-weight: 600;
+            padding: 4px 12px;
+            background: var(--secondary-color);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .input-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .rates-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .rate-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .rate-item:last-child {
+            border-bottom: none;
+        }
+
+        .rate-label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rate-value {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .calculate-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .calculate-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px var(--shadow-color);
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .total-zakat {
+            font-size: 36px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 15px 0;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .breakdown-label {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .breakdown-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Enhanced touch-friendly styles */
+        @media (hover: none) {
+            .category-card:hover {
+                transform: none;
+            }
+            
+            .category-card:active {
+                transform: scale(0.98);
+                background: var(--hover-color);
+            }
+            
+            .calculate-btn:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* iOS-specific styles */
+        @supports (-webkit-touch-callout: none) {
+            input, select, button {
+                -webkit-appearance: none;
+                appearance: none;
+            }
+            
+            select {
+                background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333'%3E%3Cpath d='M6 9L0 0h12z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 8px center;
+                padding-right: 24px;
+            }
+        }
+
+        /* Better mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 12px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .theme-switcher {
+                justify-content: center;
+            }
+
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .category-card {
+                padding: 15px;
+            }
+
+            .input-section, .rates-card {
+                padding: 15px;
+            }
+
+            .input-group input,
+            .input-group select {
+                font-size: 16px; /* Prevents iOS zoom */
+            padding: 10px;
+            }
+
+            .calculate-btn {
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .theme-btn {
+                padding: 6px 10px;
+                font-size: 12px;
+            }
+
+            .category-icon {
+                font-size: 20px;
+            }
+
+            .category-name {
+                font-size: 14px;
+            }
+
+            .category-value {
+                font-size: 12px;
+                padding: 3px 8px;
+            }
+        }
+
+        /* Prevent pull-to-refresh on mobile */
+        html, body {
+            overscroll-behavior-y: contain;
+            -webkit-overflow-scrolling: touch;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        /* Safe area insets for notched devices */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+                padding-bottom: max(20px, env(safe-area-inset-bottom));
+            }
+        }
+
+        /* Add these styles to your existing CSS */
+        .rate-value-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-rate-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 4px;
+            font-size: 14px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .toggle-rate-btn:hover {
+            opacity: 1;
+        }
+
+        .manual-rate-input {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .manual-rate-input input {
+            width: 120px;
+            padding: 4px 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .apply-rate-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .apply-rate-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .rate-source {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .rate-value-container {
+                flex-direction: column;
+                align-items: flex-end;
+            }
+
+            .manual-rate-input {
+                width: 100%;
+            }
+
+            .manual-rate-input input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">Zakat Calculator</h1>
+            <div class="theme-switcher">
+                <button class="theme-btn" onclick="setTheme('default')" style="background: #4CAF50; color: white;">Green</button>
+                <button class="theme-btn" onclick="setTheme('blue')" style="background: #2196F3; color: white;">Blue</button>
+                <button class="theme-btn" onclick="setTheme('purple')" style="background: #9C27B0; color: white;">Purple</button>
+                <button class="theme-btn" onclick="setTheme('dark')" style="background: #121212; color: white;">Dark</button>
+            </div>
+        </header>
+
+        <div class="card-grid">
+            <div class="category-card" onclick="showSection('cash')">
+                <i class="fas fa-money-bill-wave category-icon"></i>
+                <div class="category-name">Money</div>
+                <div class="category-value" id="cash-value">0.00</div>
+            </div>
+            <div class="category-card" onclick="showSection('gold')">
+                <i class="fas fa-coins category-icon"></i>
+                <div class="category-name">Gold & Silver</div>
+                <div class="category-value" id="precious-value">0.00</div>
+            </div>
+            <div class="category-card" onclick="showSection('business')">
+                <i class="fas fa-store category-icon"></i>
+                <div class="category-name">Business</div>
+                <div class="category-value" id="business-value">0.00</div>
+            </div>
+            <div class="category-card" onclick="showSection('investments')">
+                <i class="fas fa-chart-line category-icon"></i>
+                <div class="category-name">Investments</div>
+                <div class="category-value" id="investment-value">0.00</div>
+            </div>
+            <div class="category-card" onclick="showSection('property')">
+                <i class="fas fa-home category-icon"></i>
+                <div class="category-name">Property</div>
+                <div class="category-value" id="property-value">0.00</div>
+            </div>
+            <div class="category-card" onclick="showSection('other')">
+                <i class="fas fa-plus category-icon"></i>
+                <div class="category-name">Other Assets</div>
+                <div class="category-value" id="other-value">0.00</div>
+            </div>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+        <label>Select Currency:</label>
+        <select id="currency" onchange="fetchGoldSilverRates()">
+                    <option value="USD">USD ($) - US Dollar</option>
+                    <option value="AED">AED (د.إ) - UAE Dirham</option>
+                    <option value="AUD">AUD ($) - Australian Dollar</option>
+                    <option value="BDT">BDT (৳) - Bangladeshi Taka</option>
+                    <option value="BHD">BHD (.د.ب) - Bahraini Dinar</option>
+                    <option value="CAD">CAD ($) - Canadian Dollar</option>
+                    <option value="CHF">CHF (Fr) - Swiss Franc</option>
+                    <option value="CNY">CNY (¥) - Chinese Yuan</option>
+                    <option value="EGP">EGP (£) - Egyptian Pound</option>
+                    <option value="EUR">EUR (€) - Euro</option>
+                    <option value="GBP">GBP (£) - British Pound</option>
+                    <option value="IDR">IDR (Rp) - Indonesian Rupiah</option>
+                    <option value="INR">INR (₹) - Indian Rupee</option>
+                    <option value="JOD">JOD (د.ا) - Jordanian Dinar</option>
+                    <option value="JPY">JPY (¥) - Japanese Yen</option>
+                    <option value="KWD">KWD (د.ك) - Kuwaiti Dinar</option>
+                    <option value="LKR">LKR (₨) - Sri Lankan Rupee</option>
+                    <option value="MAD">MAD (د.م.) - Moroccan Dirham</option>
+                    <option value="MYR">MYR (RM) - Malaysian Ringgit</option>
+                    <option value="NGN">NGN (₦) - Nigerian Naira</option>
+                    <option value="OMR">OMR (ر.ع.) - Omani Rial</option>
+                    <option value="PKR">PKR (₨) - Pakistani Rupee</option>
+                    <option value="QAR">QAR (ر.ق) - Qatari Riyal</option>
+                    <option value="SAR">SAR (ر.س) - Saudi Riyal</option>
+                    <option value="SGD">SGD ($) - Singapore Dollar</option>
+                    <option value="TRY">TRY (₺) - Turkish Lira</option>
+                    <option value="ZAR">ZAR (R) - South African Rand</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Select Nisab Standard:</label>
+                <select id="nisabStandard">
+                    <option value="gold">Gold Standard (87.48g - 20 mithqals)</option>
+                    <option value="silver" selected>Silver Standard (612.36g - 200 dirhams) - Recommended</option>
+        </select>
+            </div>
+        </div>
+
+        <div class="rates-card">
+            <div class="rate-item">
+                <span class="rate-label">
+                    <i class="fas fa-coins"></i> Gold Rate
+                    <button onclick="toggleManualRate('gold')" class="toggle-rate-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </span>
+                <div class="rate-value-container">
+                    <span id="goldRate" class="rate-value">Fetching...</span>
+                    <div id="goldManualInput" class="manual-rate-input" style="display: none;">
+                        <input type="number" id="manualGoldRate" placeholder="Enter rate per gram" min="0" step="0.01">
+                        <button onclick="updateManualRate('gold')" class="apply-rate-btn">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="rate-item">
+                <span class="rate-label">
+                    <i class="fas fa-coins"></i> Silver Rate
+                    <button onclick="toggleManualRate('silver')" class="toggle-rate-btn">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </span>
+                <div class="rate-value-container">
+                    <span id="silverRate" class="rate-value">Fetching...</span>
+                    <div id="silverManualInput" class="manual-rate-input" style="display: none;">
+                        <input type="number" id="manualSilverRate" placeholder="Enter rate per gram" min="0" step="0.01">
+                        <button onclick="updateManualRate('silver')" class="apply-rate-btn">
+                            <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="rate-source">
+                <small id="rateSource" style="color: var(--text-color); opacity: 0.7;">Auto-fetched from Metal Price API</small>
+            </div>
+        </div>
+
+        <div id="sections">
+            <!-- Cash Section -->
+            <div id="cash-section" class="input-group">
+                <label>Cash & Bank Balance: <small style="color: var(--primary-color);">(You can enter expressions like "1000+500")</small></label>
+                <input type="text" id="cash" placeholder="Enter amount (e.g. 1000+500)" oninput="validateNumericInput(this, 'cashFeedback')">
+                <div id="cashFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+            </div>
+
+            <!-- Gold & Silver Section -->
+            <div id="gold-section" class="input-group">
+                <label>Gold Weight: <small style="color: var(--primary-color);">(You can enter expressions like "13.5+26")</small></label>
+                <input type="text" id="goldWeight" placeholder="Enter weight (e.g. 13.5+26)" oninput="validateNumericInput(this, 'goldInputFeedback')">
+                <div id="goldInputFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+        <select id="goldUnit">
+            <option value="grams">Grams</option>
+            <option value="tola">Tolas</option>
+            <option value="oz">Ounces</option>
+            <option value="lbs">Pounds</option>
+        </select>
+
+                <label>Silver Weight: <small style="color: var(--primary-color);">(You can enter expressions like "100+50")</small></label>
+                <input type="text" id="silverWeight" placeholder="Enter weight (e.g. 100+50)" oninput="validateNumericInput(this, 'silverInputFeedback')">
+                <div id="silverInputFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+        <select id="silverUnit">
+            <option value="grams">Grams</option>
+            <option value="tola">Tolas</option>
+            <option value="oz">Ounces</option>
+            <option value="lbs">Pounds</option>
+        </select>
+            </div>
+
+            <!-- Business Assets Section -->
+            <div id="business-section" class="input-group">
+                <label>Business Inventory Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="inventoryValue" placeholder="Enter inventory value" oninput="validateNumericInput(this, 'inventoryFeedback')">
+                <div id="inventoryFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Business Bank Balance: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="businessBank" placeholder="Enter business account balance" oninput="validateNumericInput(this, 'businessBankFeedback')">
+                <div id="businessBankFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Accounts Receivable: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="accountsReceivable" placeholder="Enter receivables amount" oninput="validateNumericInput(this, 'receivableFeedback')">
+                <div id="receivableFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+            </div>
+
+            <!-- Investments Section -->
+            <div id="investments-section" class="input-group">
+                <label>Stocks Portfolio Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="stocksValue" placeholder="Enter total stocks value" oninput="validateNumericInput(this, 'stocksFeedback')">
+                <div id="stocksFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Mutual Funds Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="mutualFundsValue" placeholder="Enter mutual funds value" oninput="validateNumericInput(this, 'mutualFundsFeedback')">
+                <div id="mutualFundsFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Cryptocurrency Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="cryptoValue" placeholder="Enter cryptocurrency value" oninput="validateNumericInput(this, 'cryptoFeedback')">
+                <div id="cryptoFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+            </div>
+
+            <!-- Property Section -->
+            <div id="property-section" class="input-group">
+                <label>Annual Rental Income: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="rentalIncome" placeholder="Enter annual rental income" oninput="validateNumericInput(this, 'rentalIncomeFeedback')">
+                <div id="rentalIncomeFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Rental Property Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="propertyValue" placeholder="Enter property value" oninput="validateNumericInput(this, 'propertyValueFeedback')">
+                <div id="propertyValueFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Outstanding Rental Payments: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="outstandingRent" placeholder="Enter outstanding rent" oninput="validateNumericInput(this, 'outstandingRentFeedback')">
+                <div id="outstandingRentFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+            </div>
+
+            <!-- Other Assets Section -->
+            <div id="other-section" class="input-group">
+                <label>Jewelry Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="jewelryValue" placeholder="Enter jewelry value" oninput="validateNumericInput(this, 'jewelryFeedback')">
+                <div id="jewelryFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Vehicles Value: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="vehiclesValue" placeholder="Enter vehicles value" oninput="validateNumericInput(this, 'vehiclesFeedback')">
+                <div id="vehiclesFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Other Valuable Items: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="otherValuables" placeholder="Enter value of other items" oninput="validateNumericInput(this, 'otherValuablesFeedback')">
+                <div id="otherValuablesFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+                
+                <label>Loans Given to Others: <small style="color: var(--primary-color);">(You can enter expressions)</small></label>
+                <input type="text" id="loansGiven" placeholder="Enter total loans given" oninput="validateNumericInput(this, 'loansGivenFeedback')">
+                <div id="loansGivenFeedback" style="color: var(--primary-color); font-size: 0.9em; margin-top: 5px;"></div>
+            </div>
+        </div>
+
+        <button class="calculate-btn" onclick="calculateZakat()">
+            Calculate Zakat
+        </button>
+
+        <div id="result" class="result-card" style="display: none;">
+            <!-- Results will be populated here -->
+        </div>
+    </div>
+
+    <script>
+        let goldPrice = 0;
+        let silverPrice = 0;
+        let currencyRate = 1;
+        let selectedCurrency = "USD";
+
+        // Add theme switching functionality
+        function setTheme(theme) {
+            document.body.setAttribute('data-theme', theme);
+            localStorage.setItem('preferred-theme', theme);
+        }
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('preferred-theme') || 'default';
+            setTheme(savedTheme);
+            
+            // Initialize by hiding all sections except cash
+            const sections = [
+                'cash-section',
+                'gold-section', 
+                'business-section', 
+                'investments-section', 
+                'property-section',
+                'other-section'
+            ];
+            
+            // Show cash section by default
+            sections.forEach(section => {
+                const sectionElement = document.getElementById(section);
+                if (sectionElement) {
+                    sectionElement.style.display = section === 'cash-section' ? 'block' : 'none';
+                }
+            });
+
+            // Initialize category card values
+            document.getElementById('cash-value').textContent = '0.00';
+            document.getElementById('precious-value').textContent = '0.00';
+            document.getElementById('business-value').textContent = '0.00';
+            document.getElementById('investment-value').textContent = '0.00';
+            document.getElementById('property-value').textContent = '0.00';
+            document.getElementById('other-value').textContent = '0.00';
+
+            // Fetch initial rates
+            fetchGoldSilverRates();
+        });
+
+        function showSection(sectionName) {
+            const sections = {
+                'cash': 'cash-section',
+                'gold': 'gold-section',
+                'business': 'business-section',
+                'investments': 'investments-section',
+                'property': 'property-section',
+                'other': 'other-section'
+            };
+
+            // Hide all sections first
+            Object.values(sections).forEach(section => {
+                const sectionElement = document.getElementById(section);
+                if (sectionElement) {
+                    sectionElement.style.display = 'none';
+                }
+            });
+
+            // Show the selected section
+            if (sections[sectionName]) {
+                const selectedSection = document.getElementById(sections[sectionName]);
+                if (selectedSection) {
+                    selectedSection.style.display = 'block';
+                }
+            }
+
+            // Update active state of category cards
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.style.borderColor = 'transparent';
+            });
+            const clickedCard = event.currentTarget;
+            if (clickedCard) {
+                clickedCard.style.borderColor = 'var(--primary-color)';
+            }
+        }
+
+        async function fetchGoldSilverRates() {
+            selectedCurrency = document.getElementById("currency").value.toLowerCase();
+            try {
+                // First fetch exchange rates for all currencies
+                const exchangeResponse = await fetch(`https://api.exchangerate-api.com/v4/latest/USD`);
+                const exchangeData = await exchangeResponse.json();
+                
+                if (!exchangeData.rates) {
+                    throw new Error("Failed to fetch exchange rates");
+                }
+
+                // Store the exchange rate for selected currency
+                currencyRate = exchangeData.rates[selectedCurrency.toUpperCase()] || 1;
+
+                // Fetch gold and silver prices from multiple sources for redundancy
+                try {
+                    // Primary source: Metals API
+                    const metalResponse = await fetch('https://api.metals.live/v1/spot');
+                    const metalData = await metalResponse.json();
+                    
+                    if (Array.isArray(metalData) && metalData.length > 0) {
+                        // The API returns prices in USD per ounce
+                        const goldOuncePrice = metalData.find(metal => metal.gold)?.gold;
+                        const silverOuncePrice = metalData.find(metal => metal.silver)?.silver;
+                        
+                        if (goldOuncePrice && silverOuncePrice) {
+                            // Convert troy ounce prices to gram prices (1 troy oz = 31.1035 grams)
+                            // and apply currency conversion
+                            goldPrice = (goldOuncePrice / 31.1035) * currencyRate;
+                            silverPrice = (silverOuncePrice / 31.1035) * currencyRate;
+                        } else {
+                            throw new Error("Invalid price data");
+                        }
+                    } else {
+                        throw new Error("Invalid API response");
+                    }
+                } catch (metalError) {
+                    console.warn("Primary metal price source failed:", metalError);
+                    
+                    // Fallback to secondary source or use recent average prices
+                    // Default prices in USD per gram (based on recent market averages)
+                    goldPrice = 96.53;  // Based on your screenshot
+                    silverPrice = 1.10;  // Based on your screenshot
+                    
+                    // Convert to selected currency
+                    goldPrice *= currencyRate;
+                    silverPrice *= currencyRate;
+                }
+
+                // Get currency symbol
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
+
+                // Update the display with current prices
+                document.getElementById("goldRate").innerHTML = `${currencySymbol} ${goldPrice.toFixed(2)}/g`;
+                document.getElementById("silverRate").innerHTML = `${currencySymbol} ${silverPrice.toFixed(2)}/g`;
+
+                // Update rate source indicator with timestamp
+                const now = new Date().toLocaleString();
+                document.getElementById('rateSource').innerHTML = `Last updated: ${now}`;
+
+            } catch (error) {
+                console.error("Error in price update:", error);
+                
+                // Use hardcoded fallback prices from screenshot
+                goldPrice = 96.53;  // Your screenshot value
+                silverPrice = 1.10; // Your screenshot value
+                
+                // Convert to selected currency
+                goldPrice *= currencyRate;
+                silverPrice *= currencyRate;
+
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
+                
+                document.getElementById("goldRate").innerHTML = `${currencySymbol} ${goldPrice.toFixed(2)}/g (Est.)`;
+                document.getElementById("silverRate").innerHTML = `${currencySymbol} ${silverPrice.toFixed(2)}/g (Est.)`;
+                document.getElementById('rateSource').innerHTML = 'Using estimated rates (API unavailable)';
+            }
+        }
+
+        function evaluateExpression(expr) {
+            try {
+                // Remove all spaces and validate input contains only numbers and basic operators
+                expr = expr.replace(/\s+/g, '');
+                if (!expr) return 0;
+                if (!/^[\d+\-.]*$/.test(expr)) {
+                    return 0;
+                }
+                // Split by + and sum the numbers
+                const numbers = expr.split('+').map(num => parseFloat(num) || 0);
+                return numbers.reduce((sum, num) => sum + num, 0);
+            } catch (e) {
+                console.error('Error evaluating expression:', e);
+                return 0;
+            }
+        }
+
+        function validateNumericInput(input, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            const value = input.value;
+            
+            if (!value) {
+                feedback.textContent = '';
+                return;
+            }
+            
+            const result = evaluateExpression(value);
+            if (result === 0 && value !== '0') {
+                feedback.textContent = 'Please enter valid numbers (e.g. 100+50)';
+                feedback.style.color = '#e74c3c';
+            } else {
+                feedback.textContent = `Total: ${result.toFixed(2)}`;
+                feedback.style.color = 'var(--primary-color)';
+            }
+            return result;
+        }
+
+        function convertWeight(weight, unit) {
+            // Handle arithmetic expressions in weight
+            if (typeof weight === 'string') {
+                weight = evaluateExpression(weight);
+            }
+            
+            // Ensure weight is treated as a number
+            weight = Number(weight);
+            if (isNaN(weight)) return 0;
+
+            const conversion = {
+                grams: 1,
+                tola: 11.664,
+                oz: 31.1035,
+                lbs: 453.592
+            };
+            // Ensure precise decimal calculation
+            return parseFloat((weight * conversion[unit]).toFixed(4));
+        }
+
+        function calculateZakat() {
+            // Get all values using evaluateExpression
+            let cash = evaluateExpression(document.getElementById("cash").value);
+            let goldWeight = document.getElementById("goldWeight").value;
+            let goldUnit = document.getElementById("goldUnit").value;
+            let silverWeight = document.getElementById("silverWeight").value;
+            let silverUnit = document.getElementById("silverUnit").value;
+
+            // Business assets
+            let inventoryValue = evaluateExpression(document.getElementById("inventoryValue").value);
+            let businessBank = evaluateExpression(document.getElementById("businessBank").value);
+            let accountsReceivable = evaluateExpression(document.getElementById("accountsReceivable").value);
+            
+            // Property
+            let rentalIncome = evaluateExpression(document.getElementById("rentalIncome").value);
+            let propertyValue = evaluateExpression(document.getElementById("propertyValue").value);
+            let outstandingRent = evaluateExpression(document.getElementById("outstandingRent").value);
+            
+            // Investments
+            let stocksValue = evaluateExpression(document.getElementById("stocksValue").value);
+            let mutualFundsValue = evaluateExpression(document.getElementById("mutualFundsValue").value);
+            let cryptoValue = evaluateExpression(document.getElementById("cryptoValue").value);
+            
+            // Other assets
+            let jewelryValue = evaluateExpression(document.getElementById("jewelryValue").value);
+            let vehiclesValue = evaluateExpression(document.getElementById("vehiclesValue").value);
+            let otherValuables = evaluateExpression(document.getElementById("otherValuables").value);
+            let loansGiven = evaluateExpression(document.getElementById("loansGiven").value);
+
+            // Calculate gold and silver values
+            let goldGrams = convertWeight(goldWeight, goldUnit);
+            let silverGrams = convertWeight(silverWeight, silverUnit);
+            
+            let goldValue = parseFloat((goldGrams * goldPrice).toFixed(2));
+            let silverValue = parseFloat((silverGrams * silverPrice).toFixed(2));
+
+            // Calculate total business assets
+            let totalBusinessAssets = Number(inventoryValue) + Number(businessBank) + Number(accountsReceivable);
+
+            // Calculate total rental assets (annual income is divided by 12 to get monthly value)
+            let totalRentalAssets = Number(rentalIncome / 12) + Number(outstandingRent) + Number(propertyValue);
+
+            // Calculate total investments
+            let totalInvestments = Number(stocksValue) + Number(mutualFundsValue) + Number(cryptoValue);
+
+            // Calculate total other assets
+            let totalOtherAssets = Number(jewelryValue) + Number(vehiclesValue) + Number(otherValuables) + Number(loansGiven);
+
+            // Update category card values
+            document.getElementById("cash-value").textContent = formatCurrency(cash);
+            document.getElementById("precious-value").textContent = formatCurrency(goldValue + silverValue);
+            document.getElementById("business-value").textContent = formatCurrency(totalBusinessAssets);
+            document.getElementById("investment-value").textContent = formatCurrency(totalInvestments);
+            document.getElementById("property-value").textContent = formatCurrency(totalRentalAssets);
+            document.getElementById("other-value").textContent = formatCurrency(totalOtherAssets);
+
+            // Calculate total wealth
+            let totalWealth = (
+                cash + 
+                goldValue + 
+                silverValue + 
+                totalBusinessAssets + 
+                totalRentalAssets + 
+                totalInvestments +
+                totalOtherAssets
+            );
+
+            // Calculate both Nisab thresholds
+            let goldNisabThreshold = 87.48 * goldPrice;  // 87.48g of gold (20 mithqals)
+            let silverNisabThreshold = 612.36 * silverPrice;  // 612.36g of silver (200 dirhams)
+
+            // Get selected Nisab standard
+            let selectedNisabStandard = document.getElementById("nisabStandard").value;
+            let nisabThreshold = selectedNisabStandard === 'gold' ? goldNisabThreshold : silverNisabThreshold;
+
+            // Format currency values
+            function formatCurrency(amount) {
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
+                return `${currencySymbol} ${amount.toFixed(2)}`;
+            }
+
+            // Create detailed breakdown
+            let resultHTML = `
+                <div class="result-header">
+                    <h3>Your Zakat Results</h3>
+                    <div class="calculation-time">Calculated on ${new Date().toLocaleString()}</div>
+                </div>
+
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Cash & Bank Balance</span>
+                    <span class="breakdown-value">${formatCurrency(cash)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Gold Value</span>
+                    <span class="breakdown-value">${formatCurrency(goldValue)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Silver Value</span>
+                    <span class="breakdown-value">${formatCurrency(silverValue)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Business Assets</span>
+                    <span class="breakdown-value">${formatCurrency(totalBusinessAssets)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Rental Assets</span>
+                    <span class="breakdown-value">${formatCurrency(totalRentalAssets)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Investments</span>
+                    <span class="breakdown-value">${formatCurrency(totalInvestments)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Other Assets</span>
+                    <span class="breakdown-value">${formatCurrency(totalOtherAssets)}</span>
+                </div>
+
+                <hr>
+
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Total Wealth</span>
+                    <span class="breakdown-value">${formatCurrency(totalWealth)}</span>
+                </div>
+                <div class="breakdown-item">
+                    <span class="breakdown-label">Nisab Threshold (${selectedNisabStandard})</span>
+                    <span class="breakdown-value">${formatCurrency(nisabThreshold)}</span>
+                </div>
+            `;
+
+            if (totalWealth >= nisabThreshold) {
+                let zakatDue = totalWealth * 0.025;
+                resultHTML += `
+                    <div class="total-zakat">
+                        Zakat Due: ${formatCurrency(zakatDue)}
+                    </div>
+                    <small style="color: #666; text-align: center; display: block;">
+                        (2.5% of total wealth)
+                    </small>
+                `;
+            } else {
+                resultHTML += `
+                    <div style="color: #e74c3c; text-align: center; margin-top: 20px;">
+                        <strong>Zakat Not Due</strong><br>
+                        <small>Total wealth is below the Nisab threshold</small>
+                    </div>
+                `;
+            }
+
+            document.getElementById("result").innerHTML = resultHTML;
+            document.getElementById("result").style.display = "block";
+        }
+
+        // Add touch event handling for mobile
+        document.addEventListener('touchstart', function() {}, {passive: true});
+        
+        // Prevent double-tap zoom on iOS
+        document.addEventListener('dblclick', function(e) {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Prevent elastic scrolling on iOS
+        document.body.addEventListener('touchmove', function(e) {
+            if (e.target.closest('.input-group, .result-card')) return;
+            e.preventDefault();
+        }, { passive: false });
+        
+        // Add platform detection
+        function detectPlatform() {
+            const ua = navigator.userAgent.toLowerCase();
+            if (ua.includes('android')) return 'android';
+            if (ua.includes('iphone') || ua.includes('ipad') || ua.includes('ipod')) return 'ios';
+            return 'desktop';
+        }
+        
+        // Adjust UI based on platform
+        document.addEventListener('DOMContentLoaded', () => {
+            const platform = detectPlatform();
+            document.body.setAttribute('data-platform', platform);
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('preferred-theme') || 'default';
+            setTheme(savedTheme);
+            
+            // Initialize sections
+            const sections = ['gold-section', 'business-section', 'investments-section', 'property-section'];
+            sections.forEach(section => {
+                document.getElementById(section).style.display = 'none';
+            });
+            
+            // Initial rates fetch
+        fetchGoldSilverRates();
+            
+            // Add active states for touch devices
+            if (platform === 'ios' || platform === 'android') {
+                document.querySelectorAll('.category-card, .calculate-btn').forEach(el => {
+                    el.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.98)';
+                    }, { passive: true });
+                    
+                    el.addEventListener('touchend', function() {
+                        this.style.transform = '';
+                    }, { passive: true });
+                });
+            }
+        });
+
+        // Add these functions to your existing JavaScript
+        function toggleManualRate(metal) {
+            const manualInput = document.getElementById(`${metal}ManualInput`);
+            const rateDisplay = document.getElementById(`${metal}Rate`);
+            
+            if (manualInput.style.display === 'none') {
+                manualInput.style.display = 'flex';
+                rateDisplay.style.display = 'none';
+                // Pre-fill with current rate
+                document.getElementById(`manual${metal.charAt(0).toUpperCase() + metal.slice(1)}Rate`).value = 
+                    metal === 'gold' ? goldPrice.toFixed(2) : silverPrice.toFixed(2);
+            } else {
+                manualInput.style.display = 'none';
+                rateDisplay.style.display = 'inline';
+            }
+        }
+
+        function updateManualRate(metal) {
+            const manualRate = parseFloat(document.getElementById(`manual${metal.charAt(0).toUpperCase() + metal.slice(1)}Rate`).value);
+            if (!isNaN(manualRate) && manualRate >= 0) {
+                const currencySymbols = {
+                    usd: '$', eur: '€', gbp: '£', pkr: '₨', aed: 'د.إ', aud: '$', 
+                    bdt: '৳', bhd: '.د.ب', cad: '$', chf: 'Fr', cny: '¥', egp: '£',
+                    idr: 'Rp', inr: '₹', jod: 'د.ا', jpy: '¥', kwd: 'د.ك', lkr: '₨',
+                    mad: 'د.م.', myr: 'RM', ngn: '₦', omr: 'ر.ع.', qar: 'ر.ق', 
+                    sar: 'ر.س', sgd: '$', try: '₺', zar: 'R'
+                };
+                const currencySymbol = currencySymbols[selectedCurrency] || selectedCurrency.toUpperCase();
+
+                if (metal === 'gold') {
+                    goldPrice = manualRate;
+                    document.getElementById('goldRate').innerHTML = `${currencySymbol} ${manualRate.toFixed(2)}/g (Manual)`;
+                } else {
+                    silverPrice = manualRate;
+                    document.getElementById('silverRate').innerHTML = `${currencySymbol} ${manualRate.toFixed(2)}/g (Manual)`;
+                }
+
+                // Update rate source indicator
+                document.getElementById('rateSource').innerHTML = 'Using manually entered rates';
+                
+                // Hide manual input
+                toggleManualRate(metal);
+            }
+        }
+    </script>
+</body>
+</html>
+
+
